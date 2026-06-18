@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><link rel="stylesheet" href="../css/style.css"><script src="../js/util.js"></script></head>
+<body>
+<div class="page-wrap">
+  <div class="page-header"><div class="page-title">📦 Produtos</div><div class="page-sub">Controle de produtos e estoque</div></div>
+
+  <div class="form-card">
+    <div class="form-card-title" id="formTitulo">Novo Produto</div>
+    <div class="form-row">
+      <div class="form-group fg3"><label class="form-label">Nome do Produto *</label><input id="nome" placeholder="Ex: Ração Premium, Shampoo Pet..."></div>
+      <div class="form-group fg2"><label class="form-label">Categoria</label><input id="categoria" placeholder="Ex: Ração, Higiene, Medicamento..."></div>
+      <div class="form-group fg1"><label class="form-label">Preço (R$) *</label><input type="number" id="preco" placeholder="0,00" min="0" step="0.01"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group fg1"><label class="form-label">Estoque Atual</label><input type="number" id="estoque" placeholder="0" min="0"></div>
+      <div class="form-group fg1"><label class="form-label">Estoque Mínimo</label><input type="number" id="estoqueMin" placeholder="0" min="0"></div>
+      <div class="form-group fg2"><label class="form-label">Fornecedor</label><select id="fornecedor"></select></div>
+      <div class="form-group fg2"><label class="form-label">Observações</label><input id="obs" placeholder="Marca, validade..."></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-primary" id="btnSalvar" onclick="salvar()">+ Salvar Produto</button>
+      <button class="btn-cancel" id="btnCancelar" onclick="cancelar()">Cancelar</button>
+    </div>
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok"   id="avisoOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <span class="tbl-title">Produtos Cadastrados</span>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <select class="search-box" id="filtroCat" onchange="renderProdutos()" style="width:170px"><option value="">Todas categorias</option></select>
+        <input class="search-box" id="busca" placeholder="🔍 Nome ou categoria..." oninput="renderProdutos()">
+        <span class="tbl-count" id="count"></span>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Nome</th><th>Categoria</th><th style="text-align:right">Preço</th><th style="text-align:center">Estoque</th><th style="text-align:center">Mínimo</th><th style="text-align:center">Ações</th></tr></thead>
+      <tbody id="tbody"><tr><td colspan="6" class="empty">Nenhum produto cadastrado.</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<script src="../js/produtos.js"></script>
+</body></html>

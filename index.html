@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" data-tema="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>PetFlow</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/licenca.js"></script>
+  <script src="js/theme.js"></script>
+  <script>
+    if (!licencaAtivaPF()) {
+      document.write('<meta http-equiv="refresh" content="0;url=pages/licenca.html">')
+    }
+  </script>
+</head>
+<body class="main-shell">
+<div class="container">
+
+  <div class="menu">
+    <div class="menu-logo">
+      <div class="logo-icon">&#128062;</div>
+      <span class="logo-text">Pet<span class="logo-accent">Flow</span></span>
+    </div>
+
+    <nav class="menu-nav">
+      <button class="nav-btn active" onclick="ir('pages/dashboard.html',this)">
+        <span class="nav-icon">&#127968;</span><span class="nav-label">Dashboard</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/agenda.html',this)">
+        <span class="nav-icon">&#128197;</span><span class="nav-label">Agenda / Pagamentos</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/clientes.html',this)">
+        <span class="nav-icon">&#128101;</span><span class="nav-label">Clientes</span>
+        <span class="nav-badge" id="badgeCli"></span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/animais.html',this)">
+        <span class="nav-icon">&#128054;</span><span class="nav-label">Animais</span>
+        <span class="nav-badge" id="badgeAni"></span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/vacinas.html',this)">
+        <span class="nav-icon">&#128137;</span><span class="nav-label">Vacinas</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/prontuarios.html',this)">
+        <span class="nav-icon">&#128221;</span><span class="nav-label">Prontuarios</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/produtos.html',this)">
+        <span class="nav-icon">&#128230;</span><span class="nav-label">Produtos</span>
+        <span class="nav-badge" id="badgeProd" style="background:#f9a825"></span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/servicos.html',this)">
+        <span class="nav-icon">&#9986;</span><span class="nav-label">Servicos</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/fornecedores.html',this)">
+        <span class="nav-icon">&#127970;</span><span class="nav-label">Fornecedores</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/financeiro.html',this)">
+        <span class="nav-icon">&#128176;</span><span class="nav-label">Financeiro</span>
+      </button>
+
+      <div class="nav-sep"></div>
+
+      <button class="nav-btn" onclick="ir('pages/como_usar.html',this)">
+        <span class="nav-icon">&#128214;</span><span class="nav-label">Como Usar</span>
+      </button>
+      <button class="nav-btn" onclick="ir('pages/sobre.html',this)">
+        <span class="nav-icon">&#8505;</span><span class="nav-label">Sobre</span>
+      </button>
+    </nav>
+
+    <div class="menu-footer">
+      <button class="btn-tema" id="btnTema" onclick="alternarTema()">
+        <span id="temaIcon">&#9728;</span>
+        <span id="temaLabel">Modo Claro</span>
+      </button>
+      <div class="menu-footer-brand">Desenvolvido por</div>
+      <div class="menu-footer-name">GHZ Plugin</div>
+    </div>
+  </div>
+
+  <div class="conteudo">
+    <iframe id="frame" src="pages/dashboard.html"></iframe>
+  </div>
+
+</div>
+
+<script>
+  try {
+    const fs = require('fs')
+    const path = require('path')
+    const argData = (process.argv || []).find((a) => String(a || '').startsWith('--data-dir='))
+    const fromArg = argData ? String(argData).replace('--data-dir=', '') : ''
+    const appData = (process.env && process.env.APPDATA) ? process.env.APPDATA : ''
+    const fallback = appData ? path.join(appData, 'petflow', 'data') : path.join(__dirname, 'data')
+    const lockedDir = fromArg || fallback
+    if (lockedDir && !fs.existsSync(lockedDir)) fs.mkdirSync(lockedDir, { recursive: true })
+    window.__PETFLOW_DATA_DIR = lockedDir
+  } catch (e) {}
+
+  const tema = localStorage.getItem('@PETFLOW:tema') || 'dark'
+  document.documentElement.setAttribute('data-tema', tema)
+  document.getElementById('temaIcon').textContent = tema === 'dark' ? '☀' : '☾'
+  document.getElementById('temaLabel').textContent = tema === 'dark' ? 'Modo Claro' : 'Modo Escuro'
+
+  function ir(pagina, btn) {
+    document.getElementById('frame').src = pagina
+    document.querySelectorAll('.nav-btn').forEach((b) => b.classList.remove('active'))
+    if (btn) btn.classList.add('active')
+    atualizarBadges()
+  }
+
+  function alternarTema() {
+    const atual = localStorage.getItem('@PETFLOW:tema') || 'dark'
+    const novo = atual === 'dark' ? 'light' : 'dark'
+    localStorage.setItem('@PETFLOW:tema', novo)
+    document.documentElement.setAttribute('data-tema', novo)
+    document.getElementById('temaIcon').textContent = novo === 'dark' ? '☀' : '☾'
+    document.getElementById('temaLabel').textContent = novo === 'dark' ? 'Modo Claro' : 'Modo Escuro'
+
+    const frame = document.getElementById('frame')
+    frame.src = frame.src
+  }
+
+  function atualizarBadges() {
+    try {
+      const fs = require('fs')
+      const path = require('path')
+      const arg = process.argv.find((a) => a.startsWith('--data-dir='))
+      const dir = arg ? arg.replace('--data-dir=', '') : path.join(__dirname, 'data')
+
+      const lerArqLocal = (arq) => {
+        const p = path.join(dir, arq)
+        try {
+          return JSON.parse(fs.existsSync(p) ? fs.readFileSync(p, 'utf8') || '[]' : '[]')
+        } catch (e) {
+          return []
+        }
+      }
+
+      const clientes = lerArqLocal('clientes.json')
+      const animais = lerArqLocal('animais.json')
+      const produtos = lerArqLocal('produtos.json')
+      const alertas = produtos.filter((p) => Number(p.estoque || 0) <= Number(p.estoqueMin || 0))
+
+      const setBadge = (id, n, show) => {
+        const el = document.getElementById(id)
+        if (!el) return
+        el.textContent = n
+        el.style.display = show ? 'flex' : 'none'
+      }
+
+      setBadge('badgeCli', clientes.length, clientes.length > 0)
+      setBadge('badgeAni', animais.length, animais.length > 0)
+      setBadge('badgeProd', alertas.length, alertas.length > 0)
+    } catch (e) {}
+  }
+
+  atualizarBadges()
+  setInterval(atualizarBadges, 4000)
+</script>
+</body>
+</html>

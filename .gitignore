@@ -1,0 +1,14 @@
+﻿node_modules/
+dist/
+dist_installer/
+dist_electron/
+data/*
+!data/.gitkeep
+*.log
+*.exe
+*.msi
+*.zip
+*.blockmap
+Thumbs.db
+.DS_Store
+_tmp_extract/

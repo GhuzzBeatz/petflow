@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-title">&#128054; Animais</div>
+    <div class="page-sub">Cadastro de pacientes, vacinas e historico clinico</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title" id="formTitulo">Novo Animal</div>
+
+    <div class="form-row">
+      <div class="form-group fg2">
+        <label class="form-label">Nome do Animal *</label>
+        <input id="nomeAnimal" placeholder="Ex: Rex, Luna, Mel...">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Especie</label>
+        <select id="especie">
+          <option value="">Selecione...</option>
+          <option>Cao</option>
+          <option>Gato</option>
+          <option>Passaro</option>
+          <option>Coelho</option>
+          <option>Hamster</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Raca</label>
+        <input id="raca" placeholder="Ex: Golden, SRD...">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group fg2">
+        <label class="form-label">Dono (Cliente) *</label>
+        <div class="ac-wrap" id="acWrap">
+          <input id="donoBusca" list="donoSugestoes" placeholder="Buscar cliente por nome ou tel..." oninput="filtrarDono()" onfocus="mostrarSugestoesDono()" autocomplete="off">
+          <datalist id="donoSugestoes"></datalist>
+          <div class="ac-list" id="acList"></div>
+        </div>
+        <input type="hidden" id="donoId">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Nascimento</label>
+        <input type="date" id="nascimento">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Peso (kg)</label>
+        <input type="number" id="peso" placeholder="0.0" step="0.1" min="0">
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Observacoes</label>
+        <input id="obsAnimal" placeholder="Alergias, condicoes especiais...">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-primary" id="btnSalvar" onclick="salvarAnimal()">+ Cadastrar Animal</button>
+      <button class="btn-cancel" id="btnCancelar" onclick="cancelar()">Cancelar</button>
+    </div>
+
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok" id="avisoOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <span class="tbl-title">Animais Cadastrados</span>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <select class="search-box" id="filtroEspecie" onchange="renderAnimais()" style="width:140px">
+          <option value="">Todas especies</option>
+          <option>Cao</option>
+          <option>Gato</option>
+          <option>Passaro</option>
+          <option>Coelho</option>
+          <option>Hamster</option>
+          <option>Outro</option>
+        </select>
+        <input class="search-box" id="busca" placeholder="&#128269; Animal ou dono..." oninput="renderAnimais()">
+        <span class="tbl-count" id="count"></span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Especie</th>
+          <th>Raca</th>
+          <th>Dono</th>
+          <th>Nascimento</th>
+          <th>Peso</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"><tr><td colspan="7" class="empty">Nenhum animal cadastrado.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="modal-ov" id="modalVacinas" style="display:none" onclick="if(event.target===this)fecharVacinas()">
+    <div class="modal-box" style="width:640px">
+      <div class="modal-title" id="modalNomeAnimal">Carteira de Vacinacao</div>
+
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px">
+        <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Registrar Vacina</div>
+        <div class="form-row">
+          <div class="form-group fg2">
+            <label class="form-label">Nome da Vacina *</label>
+            <input id="vacNome" placeholder="Ex: V8, Antirrabica...">
+          </div>
+          <div class="form-group fg1">
+            <label class="form-label">Data Aplicacao *</label>
+            <input type="date" id="vacData">
+          </div>
+          <div class="form-group fg1">
+            <label class="form-label">Validade / Proxima Dose</label>
+            <input type="date" id="vacProxima">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:8px">
+          <div class="form-group fg3">
+            <label class="form-label">Observacoes</label>
+            <input id="vacObs" placeholder="Lote, fabricante, observacoes...">
+          </div>
+          <div class="form-group" style="justify-content:flex-end">
+            <label class="form-label">&nbsp;</label>
+            <button class="btn btn-primary" onclick="adicionarVacina()">+ Adicionar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="listaVacinas"><div class="empty" style="padding:20px">Nenhuma vacina registrada.</div></div>
+
+      <div class="modal-acts">
+        <button class="btn btn-ghost" onclick="fecharVacinas()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-ov" id="modalProntuario" style="display:none" onclick="if(event.target===this)fecharProntuario()">
+    <div class="modal-box" style="width:760px">
+      <div class="modal-title" id="tituloProntuario">Ficha Clinica e Receita</div>
+
+      <div class="resumo-card">
+        <div class="resumo-title">Ficha Clinica do Animal</div>
+        <textarea id="fichaTexto" class="big-textarea" placeholder="Documento em branco para anotacoes clinicas..."></textarea>
+      </div>
+
+      <div class="resumo-card">
+        <div class="resumo-title">Anexos de Exames</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-mini" onclick="abrirSeletorExames()">Anexar exame(s)</button>
+          <input type="file" id="inputExames" multiple style="display:none" onchange="anexarExamesSelecionados()">
+          <span class="anexo-meta">Anexe PDFs, imagens ou outros arquivos de resultado.</span>
+        </div>
+        <div id="listaAnexos" class="anexos-lista">
+          <div class="empty">Nenhum anexo registrado.</div>
+        </div>
+      </div>
+
+      <div class="resumo-card">
+        <div class="resumo-title">Receita Digital</div>
+        <textarea id="receitaTexto" class="big-textarea" placeholder="Escreva aqui a receita digital para este paciente..."></textarea>
+      </div>
+
+      <div class="modal-acts">
+        <button class="btn btn-ghost" onclick="imprimirReceita()">Imprimir Receita</button>
+        <button class="btn btn-primary" onclick="salvarProntuario()">Salvar Prontuario</button>
+        <button class="btn btn-ghost" onclick="fecharProntuario()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/animais.js"></script>
+</body>
+</html>

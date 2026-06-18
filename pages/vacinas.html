@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-title">&#128137; Vacinas</div>
+    <div class="page-sub">Controle central de aplicacoes, validade e proximas doses</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Registrar Vacina</div>
+    <div class="form-row">
+      <div class="form-group fg2">
+        <label class="form-label">Animal *</label>
+        <select id="animalId"></select>
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Nome da Vacina *</label>
+        <input id="vacNome" placeholder="Ex: V8, Antirrabica, Giardase...">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Data Aplicacao *</label>
+        <input type="date" id="vacData">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Validade / Proxima Dose</label>
+        <input type="date" id="vacProxima">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group fg3">
+        <label class="form-label">Observacoes</label>
+        <input id="vacObs" placeholder="Lote, fabricante, reacao, observacao clinica...">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-primary" onclick="adicionarVacina()">+ Registrar Vacina</button>
+      </div>
+    </div>
+
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok" id="avisoOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <span class="tbl-title">Historico de Vacinas</span>
+      <div class="tbl-actions">
+        <select class="search-box" id="filtroMes" onchange="renderVacinas()" style="width:150px">
+          <option value="">Todos os meses</option>
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Marco</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+        <select class="search-box" id="filtroStatus" onchange="renderVacinas()" style="width:170px">
+          <option value="">Todos os status</option>
+          <option value="vencida">Vencida</option>
+          <option value="vencendo">Vencendo (ate 30 dias)</option>
+          <option value="emdia">Em dia</option>
+        </select>
+        <input class="search-box" id="busca" placeholder="&#128269; Animal, dono, vacina..." oninput="renderVacinas()">
+        <span class="tbl-count" id="count"></span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Animal</th>
+          <th>Dono</th>
+          <th>Vacina</th>
+          <th>Aplicacao</th>
+          <th>Validade / Proxima</th>
+          <th>Status</th>
+          <th>Observacoes</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="8" class="empty">Carregando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="../js/vacinas.js"></script>
+</body>
+</html>

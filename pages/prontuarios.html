@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-title">&#128221; Prontuarios</div>
+    <div class="page-sub">Ficha clinica, receita digital e anexos de exames por paciente</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Selecionar Paciente</div>
+    <div class="form-row">
+      <div class="form-group fg2">
+        <label class="form-label">Buscar animal</label>
+        <input id="buscaAnimal" placeholder="Nome do animal ou dono..." oninput="filtrarSelectAnimais()">
+      </div>
+      <div class="form-group fg3">
+        <label class="form-label">Animal *</label>
+        <select id="animalId" onchange="carregarProntuarioAnimal()"></select>
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-primary" onclick="carregarProntuarioAnimal()">Abrir prontuario</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row" style="align-items:stretch">
+    <div class="resumo-card fg2">
+      <div class="resumo-title">Ficha Clinica</div>
+      <textarea id="fichaTexto" class="big-textarea" placeholder="Anotacoes clinicas, sinais, condutas, retorno..."></textarea>
+
+      <div class="resumo-title" style="margin-top:14px">Receita Digital</div>
+      <textarea id="receitaTexto" class="big-textarea" placeholder="Prescricao para impressao..."></textarea>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn btn-primary" onclick="salvarProntuario()">Salvar prontuario</button>
+        <button class="btn btn-ghost" onclick="imprimirReceita()">Imprimir receita</button>
+      </div>
+    </div>
+
+    <div class="resumo-card fg2">
+      <div class="resumo-title">Anexos de Exames</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-mini" onclick="abrirSeletorExames()">Anexar exame(s)</button>
+        <input type="file" id="inputExames" multiple style="display:none" onchange="anexarExamesSelecionados()">
+        <span class="anexo-meta">RX, PDF, imagem ou outros arquivos</span>
+      </div>
+      <div id="listaAnexos" class="anexos-lista">
+        <div class="empty">Nenhum anexo registrado.</div>
+      </div>
+
+      <div class="resumo-title" style="margin-top:14px">Resumo do Paciente</div>
+      <div id="resumoPaciente" class="anexo-meta">Selecione um animal para visualizar os dados.</div>
+    </div>
+  </div>
+
+  <div class="aviso av-erro" id="avisoErro"></div>
+  <div class="aviso av-ok" id="avisoOk"></div>
+
+  <div class="tbl-wrap" style="margin-top:18px">
+    <div class="tbl-top">
+      <span class="tbl-title">Historico Geral de Prontuarios</span>
+      <span class="tbl-count" id="count"></span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Animal</th>
+          <th>Dono</th>
+          <th>Ficha Clinica</th>
+          <th>Anexos</th>
+          <th>Atualizado em</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="../js/prontuarios.js"></script>
+</body>
+</html>

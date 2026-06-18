@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-title">&#9986; Servicos</div>
+    <div class="page-sub">Servicos oferecidos pelo estabelecimento</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title" id="formTitulo">Novo Servico</div>
+    <div class="form-row">
+      <div class="form-group fg3">
+        <label class="form-label">Nome do Servico *</label>
+        <input id="nome" placeholder="Ex: Banho e Tosa, Consulta, Vacina...">
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Tipo</label>
+        <select id="tipo">
+          <option value="">Selecione...</option>
+          <option>Banho e Tosa</option>
+          <option>Consulta</option>
+          <option>Vacinacao</option>
+          <option>Cirurgia</option>
+          <option>Exame</option>
+          <option>Internacao</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Valor (R$) *</label>
+        <input type="number" id="preco" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Duracao</label>
+        <input id="duracao" placeholder="Ex: 1h30min">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Observacoes</label>
+        <input id="obs" placeholder="Detalhes do servico...">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-primary" id="btnSalvar" onclick="salvar()">+ Salvar Servico</button>
+      <button class="btn-cancel" id="btnCancelar" onclick="cancelar()">Cancelar</button>
+    </div>
+
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok" id="avisoOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <span class="tbl-title">Servicos Cadastrados</span>
+      <div class="tbl-actions">
+        <input class="search-box" id="buscaServico" placeholder="&#128269; Buscar servico por nome ou tipo" oninput="renderServicos()">
+        <span class="tbl-count" id="count"></span>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Servico</th>
+          <th>Tipo</th>
+          <th style="text-align:right">Valor</th>
+          <th style="text-align:center">Duracao</th>
+          <th>Observacoes</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="6" class="empty">Nenhum servico cadastrado.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="../js/servicos.js"></script>
+</body>
+</html>

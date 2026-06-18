@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="page-header">
+    <div class="page-title">&#127968; Dashboard</div>
+    <div class="page-sub">Visao geral do seu negocio hoje</div>
+  </div>
+
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi-card">
+      <div><div class="kpi-label">Clientes</div><div class="kpi-val" id="kpiCli">0</div><div class="kpi-sub">cadastrados</div></div>
+      <div class="kpi-icon ki-blue">&#128101;</div>
+    </div>
+    <div class="kpi-card">
+      <div><div class="kpi-label">Animais</div><div class="kpi-val" id="kpiAni">0</div><div class="kpi-sub">cadastrados</div></div>
+      <div class="kpi-icon ki-green">&#128062;</div>
+    </div>
+    <div class="kpi-card">
+      <div><div class="kpi-label">Alertas de Estoque</div><div class="kpi-val" id="kpiAlerta" style="color:var(--orange)">0</div><div class="kpi-sub">produtos abaixo do minimo</div></div>
+      <div class="kpi-icon ki-orange">&#9888;</div>
+    </div>
+    <div class="kpi-card">
+      <div><div class="kpi-label">Alertas de Vacina</div><div class="kpi-val" id="kpiVacinas" style="color:var(--red)">0</div><div class="kpi-sub">vencidas e proximas</div></div>
+      <div class="kpi-icon ki-red">&#128137;</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="kpi-card">
+      <div><div class="kpi-label">Ja Atendidos</div><div class="kpi-val" id="kpiAtend" style="color:var(--green)">0</div><div class="kpi-sub">horario ja passou</div></div>
+      <div class="kpi-icon ki-green">&#9989;</div>
+    </div>
+    <div class="kpi-card">
+      <div><div class="kpi-label">Serao Atendidos</div><div class="kpi-val" id="kpiAguard" style="color:var(--primary)">0</div><div class="kpi-sub">agendados no futuro</div></div>
+      <div class="kpi-icon ki-blue">&#128197;</div>
+    </div>
+    <div class="kpi-card">
+      <div><div class="kpi-label">Faturamento Realizado</div><div class="kpi-val sm" id="kpiFat" style="color:var(--green)">R$ 0,00</div><div class="kpi-sub">somente atendidos</div></div>
+      <div class="kpi-icon ki-purple">&#128176;</div>
+    </div>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head">
+      <span>&#128197; Proximos Agendamentos</span>
+      <span style="font-size:11px;color:var(--muted)">agendamentos futuros</span>
+    </div>
+    <table>
+      <thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Animal</th><th>Servico</th><th style="text-align:right">Valor</th></tr></thead>
+      <tbody id="tbProximos"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head">
+      <span>&#9989; Ultimos Atendidos</span>
+      <span style="font-size:11px;color:var(--muted)">horario ja passou</span>
+    </div>
+    <table>
+      <thead><tr><th>Data</th><th>Hora</th><th>Cliente</th><th>Animal</th><th>Servico</th><th style="text-align:right">Valor</th></tr></thead>
+      <tbody id="tbAtendidos"><tr><td colspan="6" class="empty">Carregando...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head">
+      <span>&#128137; Alertas de Vacinas</span>
+      <span style="font-size:11px;color:var(--muted)">vencidas e proximas (ate 30 dias)</span>
+    </div>
+    <table>
+      <thead><tr><th>Animal</th><th>Dono</th><th>Vacina</th><th>Proxima dose</th><th>Status</th></tr></thead>
+      <tbody id="tbVacinas"><tr><td colspan="5" class="empty">Carregando...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="sec-card">
+    <div class="sec-head">
+      <span>&#9888; Alertas de Estoque Baixo</span>
+      <span style="font-size:11px;color:var(--muted)">produtos abaixo do minimo</span>
+    </div>
+    <table>
+      <thead><tr><th>Produto</th><th>Estoque Atual</th><th>Minimo</th></tr></thead>
+      <tbody id="tbAlertas"><tr><td colspan="3" class="empty">Carregando...</td></tr></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script src="../js/dashboard.js"></script>
+</body>
+</html>

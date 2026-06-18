@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/util.js"></script>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-title">&#128197; Agenda / Pagamentos</div>
+    <div class="page-sub">Agendamentos e movimentacao de caixa (pagamentos e estornos)</div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-card-title">Novo Agendamento</div>
+
+    <div class="form-row">
+      <div class="form-group fg1">
+        <label class="form-label">Data *</label>
+        <input type="date" id="data">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Horario *</label>
+        <input type="time" id="hora">
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Cliente * (nome ou celular)</label>
+        <div class="ac-wrap" id="acWrapCli">
+          <input id="cliBusca" placeholder="Buscar cliente..." oninput="filtrarCliente()" autocomplete="off">
+          <div class="ac-list" id="acCli"></div>
+          <input type="hidden" id="cliId">
+        </div>
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Animal</label>
+        <select id="aniSelect"><option value="">-- selecione o cliente primeiro --</option></select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group fg2">
+        <label class="form-label">Servico *</label>
+        <select id="svcSelect"></select>
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Pagamento</label>
+        <select id="pagamento">
+          <option value="A definir">A definir</option>
+          <option value="Pix">Pix</option>
+          <option value="Credito">Credito</option>
+          <option value="Debito">Debito</option>
+          <option value="Dinheiro">Dinheiro</option>
+        </select>
+      </div>
+      <div class="form-group fg3">
+        <label class="form-label">Observacoes</label>
+        <input id="obsAgenda" placeholder="Informacoes adicionais...">
+      </div>
+      <div class="form-group" style="justify-content:flex-end">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-primary" onclick="salvarAgendamento()">+ Registrar</button>
+      </div>
+    </div>
+
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok" id="avisoOk"></div>
+  </div>
+
+  <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap">
+    <div class="form-group">
+      <label class="form-label">Filtrar data</label>
+      <input type="date" id="filtroData" oninput="renderAgenda()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select id="filtroStatus" onchange="renderAgenda()" style="width:150px">
+        <option value="">Todos</option>
+        <option value="pendente">Agendados</option>
+        <option value="atendido">Atendidos</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Pagamento</label>
+      <select id="filtroPagamento" onchange="renderAgenda()" style="width:150px">
+        <option value="">Todos</option>
+        <option value="Pix">Pix</option>
+        <option value="Credito">Credito</option>
+        <option value="Debito">Debito</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="A definir">A definir</option>
+      </select>
+    </div>
+    <button class="btn btn-ghost" onclick="limparFiltro()">Ver Todos</button>
+    <span style="margin-left:auto;font-size:12px;color:var(--muted);align-self:flex-end" id="count"></span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Cliente</th>
+          <th>Animal</th>
+          <th>Servico</th>
+          <th>Pagamento</th>
+          <th>Status</th>
+          <th style="text-align:right">Valor</th>
+          <th>Obs</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"><tr><td colspan="10" class="empty">Nenhum agendamento registrado.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="form-card" style="margin-top:18px">
+    <div class="form-card-title">Movimento de Caixa (Pagamento / Estorno)</div>
+
+    <div class="form-row">
+      <div class="form-group fg1">
+        <label class="form-label">Data *</label>
+        <input type="date" id="cxData">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Horario</label>
+        <input type="time" id="cxHora">
+      </div>
+      <div class="form-group fg2">
+        <label class="form-label">Cliente (opcional)</label>
+        <input id="cxCliente" placeholder="Nome do cliente">
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Tipo *</label>
+        <select id="cxTipo">
+          <option value="Pagamento">Pagamento</option>
+          <option value="Estorno">Estorno</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group fg1">
+        <label class="form-label">Forma de pagamento *</label>
+        <select id="cxForma">
+          <option value="Pix">Pix</option>
+          <option value="Credito">Credito</option>
+          <option value="Debito">Debito</option>
+          <option value="Dinheiro">Dinheiro</option>
+        </select>
+      </div>
+      <div class="form-group fg1">
+        <label class="form-label">Valor (R$) *</label>
+        <input type="number" id="cxValor" min="0.01" step="0.01" placeholder="0,00">
+      </div>
+      <div class="form-group fg3">
+        <label class="form-label">Observacoes</label>
+        <input id="cxObs" placeholder="Ex: recebimento de cliente em atraso">
+      </div>
+      <div class="form-group" style="justify-content:flex-end">
+        <label class="form-label">&nbsp;</label>
+        <button class="btn btn-primary" onclick="salvarCaixa()">+ Lancar no caixa</button>
+      </div>
+    </div>
+
+    <div class="aviso av-erro" id="avisoCaixaErro"></div>
+    <div class="aviso av-ok" id="avisoCaixaOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <div class="tbl-title">Movimentos de Caixa</div>
+      <div class="tbl-count" id="countCaixa">0 movimento(s)</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Cliente</th>
+          <th>Tipo</th>
+          <th>Forma</th>
+          <th>Obs</th>
+          <th style="text-align:right">Valor</th>
+          <th style="text-align:center">Acoes</th>
+        </tr>
+      </thead>
+      <tbody id="tbodyCaixa"><tr><td colspan="8" class="empty">Nenhum movimento de caixa.</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="modal-ov" id="modalEdit" style="display:none" onclick="fecharModal(event)">
+    <div class="modal-box">
+      <div class="modal-title">Editar Agendamento</div>
+      <input type="hidden" id="editId">
+
+      <div class="form-row">
+        <div class="form-group fg1">
+          <label class="form-label">Nova Data</label>
+          <input type="date" id="editData">
+        </div>
+        <div class="form-group fg1">
+          <label class="form-label">Novo Horario</label>
+          <input type="time" id="editHora">
+        </div>
+      </div>
+
+      <div class="form-row" style="margin-top:10px">
+        <div class="form-group fg2">
+          <label class="form-label">Servico</label>
+          <select id="editSvc"></select>
+        </div>
+        <div class="form-group fg1">
+          <label class="form-label">Pagamento</label>
+          <select id="editPagamento">
+            <option value="A definir">A definir</option>
+            <option value="Pix">Pix</option>
+            <option value="Credito">Credito</option>
+            <option value="Debito">Debito</option>
+            <option value="Dinheiro">Dinheiro</option>
+          </select>
+        </div>
+        <div class="form-group fg2">
+          <label class="form-label">Observacoes</label>
+          <input id="editObs" placeholder="Observacoes...">
+        </div>
+      </div>
+
+      <div class="modal-acts">
+        <button class="btn btn-ghost" onclick="document.getElementById('modalEdit').style.display='none'">Cancelar</button>
+        <button class="btn btn-primary" onclick="salvarEdicao()">Salvar Alteracao</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="../js/agenda.js"></script>
+</body>
+</html>

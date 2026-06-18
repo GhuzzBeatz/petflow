@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><link rel="stylesheet" href="../css/style.css"><script src="../js/util.js"></script></head>
+<body>
+<div class="page-wrap">
+  <div class="page-header"><div class="page-title">🏭 Fornecedores</div><div class="page-sub">Cadastro de fornecedores de produtos e materiais</div></div>
+
+  <div class="form-card">
+    <div class="form-card-title" id="formTitulo">Novo Fornecedor</div>
+    <div class="form-row">
+      <div class="form-group fg3"><label class="form-label">Nome / Razão Social *</label><input id="nome" placeholder="Nome da empresa ou pessoa"></div>
+      <div class="form-group fg2"><label class="form-label">CNPJ / CPF</label><input id="cnpj" placeholder="00.000.000/0000-00"></div>
+      <div class="form-group fg1"><label class="form-label">Telefone</label><input id="telefone" placeholder="(11) 99999-9999"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group fg2"><label class="form-label">E-mail</label><input id="email" type="email" placeholder="email@empresa.com"></div>
+      <div class="form-group fg2"><label class="form-label">Nome do Contato</label><input id="contato" placeholder="Responsável pelo atendimento"></div>
+      <div class="form-group fg2"><label class="form-label">Observações</label><input id="obs" placeholder="Produtos que fornece, condições..."></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-primary" id="btnSalvar" onclick="salvar()">+ Salvar Fornecedor</button>
+      <button class="btn-cancel" id="btnCancelar" onclick="cancelar()">Cancelar</button>
+    </div>
+    <div class="aviso av-erro" id="avisoErro"></div>
+    <div class="aviso av-ok"   id="avisoOk"></div>
+  </div>
+
+  <div class="tbl-wrap">
+    <div class="tbl-top">
+      <span class="tbl-title">Fornecedores Cadastrados</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input class="search-box" id="busca" placeholder="🔍 Nome ou CNPJ..." oninput="renderFornecedores()">
+        <span class="tbl-count" id="count"></span>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Nome</th><th>CNPJ/CPF</th><th>Telefone</th><th>E-mail</th><th>Contato</th><th style="text-align:center">Ações</th></tr></thead>
+      <tbody id="tbody"><tr><td colspan="6" class="empty">Nenhum fornecedor cadastrado.</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<script src="../js/fornecedores.js"></script>
+</body></html>
