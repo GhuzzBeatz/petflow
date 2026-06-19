@@ -32,7 +32,7 @@ if (typeof aplicarTemaAtual === 'function') aplicarTemaAtual()
 function fmt(inp) {
   let v = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, ''), r = ''
   const p = v.match(/^[A-Z]+/)
-  const prefixLen = p ? Math.min(p[0].length, 5) : 0
+  const prefixLen = p ? Math.min(p[0].length, 6) : 0
   const parts = []
   let pos = 0
   if (prefixLen > 0) { parts.push(v.slice(0, prefixLen)); pos = prefixLen }
