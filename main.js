@@ -1,4 +1,4 @@
-﻿const { app, BrowserWindow } = require('electron')
+﻿const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -64,6 +64,19 @@ function createWindow() {
   win.loadFile('index.html')
   win.on('page-title-updated', (e) => e.preventDefault())
 }
+
+function getDataDir() {
+  return app.isPackaged
+    ? path.join(app.getPath('userData'), 'data')
+    : path.join(__dirname, 'data')
+}
+
+// ── GHZ Backend (licenca + atualizacao) ──────────────────
+require('./js/ghz-backend')({
+  app, ipcMain, getDataDir,
+  appId: 'petflow',
+  manifestUrl: 'https://raw.githubusercontent.com/GhuzzBeatz/petflow/master/update-manifest.json'
+})
 
 app.whenReady().then(createWindow)
 app.on('window-all-closed', () => {

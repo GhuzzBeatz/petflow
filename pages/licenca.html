@@ -1,62 +1,103 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="../css/style.css">
-  <script src="../js/licenca.js"></script>
-  <script src="../js/theme.js"></script>
-</head>
+<html lang="pt-BR" data-tema="dark">
+<head><meta charset="UTF-8"><link rel="stylesheet" href="../css/style.css"><script src="../js/licenca.js"></script><script src="../js/theme.js"></script></head>
 <body>
 <div class="lic-body">
   <div class="lic-box">
-    <div class="lic-logo">
-      <div class="logo-icon" style="width:52px;height:52px;background:linear-gradient(135deg,#4f8ef7,#22d3a0);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 6px 20px rgba(79,142,247,0.4)">🐾</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px">
+      <div style="width:52px;height:52px;background:linear-gradient(135deg,#4f8ef7,#22d3a0);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 6px 20px rgba(79,142,247,0.4)">&#128062;</div>
       <div>
         <div style="font-size:26px;font-weight:900;color:var(--fg)">Pet<span style="color:var(--green)">Flow</span></div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">Ativação de Licença</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Sistema para Pet Shops — Ativacao</div>
       </div>
     </div>
-
-    <div class="lic-title">Insira sua Chave de Licença</div>
-    <div class="lic-hint">
-      Após a compra, a chave foi enviada via WhatsApp.<br>
-      Formato: <span style="font-family:monospace;color:var(--primary);font-weight:700">PETFLOW-0000-0000-0000</span>
+    <div style="font-size:14px;font-weight:700;color:var(--fg);margin-bottom:6px">Insira sua Chave de Licenca</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6">
+      Apos a compra, a chave foi enviada via mensagem.<br>
+      Formato: <span style="font-family:monospace;color:var(--primary);font-weight:700">PETFLW-XXXX-XXXX-XXXX-XXXX</span>
     </div>
-
-    <input class="lic-input" id="inputChave" maxlength="23"
-      placeholder="PETFLOW-XXXX-XXXX-XXXX"
-      oninput="fmt(this)" onkeydown="if(event.key==='Enter')ativar()">
-
-    <button class="lic-btn" onclick="ativar()">🔑 Ativar Licença</button>
-    <div class="lic-erro" id="erro">Chave inválida. Verifique e tente novamente.</div>
-
-    <div class="lic-foot">
-      Suporte: <a href="#">WhatsApp (11) 94898-1459</a> · GHZPLUGIN@GMAIL.COM
+    <input class="lic-input" id="inputChave" maxlength="30" placeholder="PETFLW-XXXX-XXXX-XXXX-XXXX" oninput="fmt(this)" onkeydown="if(event.key==='Enter')ativar()">
+    <button class="lic-btn" id="btnAtivar" onclick="ativar()">&#128273; Ativar Licenca</button>
+    <div style="background:var(--red-bg,#2d1b1b);border:1px solid rgba(240,82,82,.25);color:var(--red,#f87171);border-radius:8px;padding:9px 13px;font-size:13px;font-weight:600;margin-top:12px;display:none" id="erro"></div>
+    <div style="background:#1b2d1b;border:1px solid rgba(74,222,128,.25);color:#4ade80;border-radius:8px;padding:9px 13px;font-size:13px;font-weight:600;margin-top:12px;display:none" id="msgOk"></div>
+    <div id="deviceBox" style="margin-top:16px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;font-size:11px;color:var(--muted,#6b7280);display:none">
+      <b>Computador:</b> <span id="dName">—</span> · <b>Sistema:</b> <span id="dOs">—</span>
     </div>
+    <div style="text-align:center;margin-top:22px;font-size:11px;color:var(--muted,#6b7280)">Suporte: WhatsApp (11) 94898-1459 · GHZPLUGIN@GMAIL.COM</div>
   </div>
 </div>
 <script>
+if (typeof aplicarTemaAtual === 'function') aplicarTemaAtual()
+
 function fmt(inp) {
-  let v = inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'')
-  let r = ''
-  if (v.length <= 7)       r = v
-  else if (v.length <= 11) r = v.slice(0,7)+'-'+v.slice(7)
-  else if (v.length <= 15) r = v.slice(0,7)+'-'+v.slice(7,11)+'-'+v.slice(11)
-  else                     r = v.slice(0,7)+'-'+v.slice(7,11)+'-'+v.slice(11,15)+'-'+v.slice(15,19)
-  inp.value = r
+  let v = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, ''), r = ''
+  const p = v.match(/^[A-Z]+/)
+  const prefixLen = p ? Math.min(p[0].length, 5) : 0
+  const parts = []
+  let pos = 0
+  if (prefixLen > 0) { parts.push(v.slice(0, prefixLen)); pos = prefixLen }
+  while (pos < v.length) { parts.push(v.slice(pos, pos + 4)); pos += 4 }
+  inp.value = parts.join('-')
 }
-function ativar() {
-  const chave = document.getElementById('inputChave').value.trim()
-  const erro  = document.getElementById('erro')
-  if (validarChavePF(chave)) {
-    salvarLicencaPF(chave)
-    window.location.href = '../index.html'
-  } else {
-    erro.style.display = 'block'
-    document.getElementById('inputChave').style.borderColor = 'var(--red)'
-    setTimeout(() => { erro.style.display='none'; document.getElementById('inputChave').style.borderColor='' }, 4000)
+
+async function ativar() {
+  const btn = document.getElementById('btnAtivar')
+  const chave = document.getElementById('inputChave').value.trim().toUpperCase()
+  if (!chave || chave.length < 10) { mostrarErro('Insira uma chave valida.'); return }
+
+  btn.disabled = true
+  btn.textContent = '⏳ Validando...'
+  document.getElementById('erro').style.display = 'none'
+
+  try {
+    const state = await require('electron').ipcRenderer.invoke('license:get-state')
+    let result
+    if (state.active && state.license_key === chave) {
+      result = await ghzLicense.validateOnline()
+    } else {
+      result = await ghzLicense.activateOnline(chave)
+    }
+
+    if (result?.ok) {
+      ghzLicense.markSession()
+      document.getElementById('msgOk').textContent = '✅ Licenca ativada com sucesso!'
+      document.getElementById('msgOk').style.display = 'block'
+      setTimeout(() => { window.location.replace('../index.html') }, 800)
+      return
+    } else {
+      mostrarErro(result?.message || 'Chave invalida. Verifique e tente novamente.')
+    }
+  } catch (e) {
+    mostrarErro('Erro de conexao. Verifique sua internet e tente novamente.')
   }
+
+  btn.disabled = false
+  btn.textContent = '🔑 Ativar Licenca'
 }
+
+function mostrarErro(txt) {
+  const el = document.getElementById('erro')
+  el.textContent = txt
+  el.style.display = 'block'
+  document.getElementById('inputChave').style.borderColor = 'var(--red,#f87171)'
+  setTimeout(() => { el.style.display = 'none'; document.getElementById('inputChave').style.borderColor = '' }, 5000)
+}
+
+;(async function init() {
+  try {
+    const { ipcRenderer } = require('electron')
+    const [device, state] = await Promise.all([
+      ipcRenderer.invoke('license:device-info'),
+      ipcRenderer.invoke('license:get-state')
+    ])
+    document.getElementById('dName').textContent = device.device_name
+    document.getElementById('dOs').textContent = device.device_os
+    document.getElementById('deviceBox').style.display = ''
+    if (state.license_key) {
+      document.getElementById('inputChave').value = state.license_key
+      if (state.active) document.getElementById('btnAtivar').textContent = '🔓 Entrar'
+    }
+  } catch (e) {}
+})()
 </script>
-</body>
-</html>
+</body></html>
