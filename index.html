@@ -94,7 +94,7 @@
 
   const tema = localStorage.getItem('@PETFLOW:tema') || 'dark'
   document.documentElement.setAttribute('data-tema', tema)
-  document.getElementById('temaIcon').textContent = tema === 'dark' ? '☀' : '☾'
+  document.getElementById('temaIcon').textContent = tema === 'dark' ? '☀️' : '🌙'
   document.getElementById('temaLabel').textContent = tema === 'dark' ? 'Modo Claro' : 'Modo Escuro'
 
   function ir(pagina, btn) {
@@ -109,7 +109,7 @@
     const novo = atual === 'dark' ? 'light' : 'dark'
     localStorage.setItem('@PETFLOW:tema', novo)
     document.documentElement.setAttribute('data-tema', novo)
-    document.getElementById('temaIcon').textContent = novo === 'dark' ? '☀' : '☾'
+    document.getElementById('temaIcon').textContent = novo === 'dark' ? '☀️' : '🌙'
     document.getElementById('temaLabel').textContent = novo === 'dark' ? 'Modo Claro' : 'Modo Escuro'
 
     const frame = document.getElementById('frame')
