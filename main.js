@@ -4,6 +4,27 @@ const fs = require('fs')
 
 app.setName('PetFlow')
 
+const gotSingleInstanceLock = app.requestSingleInstanceLock()
+if (!gotSingleInstanceLock) app.quit()
+
+let win = null
+let ghzBackend = null
+
+app.on('second-instance', () => {
+  if (!win) return
+  if (win.isMinimized()) win.restore()
+  win.show()
+  win.focus()
+})
+
+function isLicensePageUrl(url) {
+  try { return decodeURIComponent(new URL(url).pathname).replace(/\\/g, '/').endsWith('/pages/licenca.html') } catch (e) { return false }
+}
+
+function loadLicensePage() {
+  if (win && !win.isDestroyed()) win.loadFile('pages/licenca.html').catch(() => {})
+}
+
 function garantirDados() {
   let dataDir
   if (app.isPackaged) {
@@ -35,7 +56,7 @@ function garantirDados() {
 function createWindow() {
   garantirDados()
 
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1280,
     height: 800,
     minWidth: 980,
@@ -56,12 +77,18 @@ function createWindow() {
       nodeIntegrationInSubFrames: true,
       contextIsolation: false,
       webSecurity: false,
+      devTools: !app.isPackaged,
       additionalArguments: ['--data-dir=' + global.DATA_DIR]
     }
   })
 
   win.setMenuBarVisibility(false)
-  win.loadFile('index.html')
+  win.webContents.on('will-navigate', (event, url) => {
+    if (!ghzBackend?.isSessionAuthorized() && !isLicensePageUrl(url)) {
+      event.preventDefault()
+      loadLicensePage()
+    }
+  })
   win.on('page-title-updated', (e) => e.preventDefault())
 }
 
@@ -72,13 +99,19 @@ function getDataDir() {
 }
 
 // ── GHZ Backend (licenca + atualizacao) ──────────────────
-require('./js/ghz-backend')({
+ghzBackend = require('./js/ghz-backend')({
   app, ipcMain, getDataDir,
   appId: 'petflow',
   manifestUrl: 'https://raw.githubusercontent.com/GhuzzBeatz/petflow/master/update-manifest.json'
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(async () => {
+  if (!gotSingleInstanceLock) return
+  createWindow()
+  await win.loadFile('pages/licenca.html')
+  const result = await ghzBackend.validateForStartup().catch(() => ({ ok: false }))
+  if (result?.ok && win && !win.isDestroyed()) await win.loadFile('index.html')
+})
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
