@@ -169,14 +169,14 @@ iframe { width: 100%; height: 100%; border: none; }
 
 /* BOTÃO TEMA */
 .btn-tema {
-  width: 100%; padding: 9px 11px;
+  width: 100%; padding: 8px 11px;
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 8px;
   background: rgba(255,255,255,0.04);
   color: rgba(255,255,255,0.6);
-  cursor: pointer; font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; gap: 9px;
-  transition: all 0.15s; margin-bottom: 10px;
+  cursor: pointer; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.15s; margin-bottom: 10px; font-family: inherit;
 }
 
 .btn-tema:hover { background: rgba(255,255,255,0.1); color: #fff; }
