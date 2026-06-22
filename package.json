@@ -1,6 +1,6 @@
 {
   "name": "petflow",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Sistema de Gestao PetFlow - PetShop e Clinica Veterinaria",
   "main": "main.js",
   "author": "GHZ Plugin",
